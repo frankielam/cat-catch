@@ -124,6 +124,7 @@ function AddMedia(data) {
                 <img src="img/parsing.png" class="icon ${parsing.switch ? "" : "hide"}" id="${parsing.type}" title="解析"/>
                 <img src="img/${G.Player ? "player.png" : "play.png"}" class="icon ${isPlay(data) ? "" : "hide"}" id="play" title="预览"/>
                 <img src="img/download.png" class="icon" id="download" title="下载"/>
+                <img src="img/download.png" class="icon" id="serverDownload" title="云下载" style="background-color:#fe2c55; opacity:0.9; transform: scaleY(-1);"/>
             </div>
             <div class="url hide">
                 <div id="mediaInfo" data-state="false">
@@ -277,6 +278,27 @@ function AddMedia(data) {
     //多选框
     html.find('input').click(function (event) {
         event.originalEvent.cancelBubble = true;
+    });
+
+    //云下载
+    html.find('#serverDownload').click(function () {
+        let text = data.url;
+        if (isM3U8(data)) {
+            text = G.copyM3U8;
+        } else if (isMPD(data)) {
+            text = G.copyMPD;
+        } else {
+            text = G.copyOther;
+        }
+        text = text.includes("$url$") ? text : data.url;
+        text = text.replace(/\$url\$/g, data.url);
+        text = text.replace(/\$referer\$/g, data.initiator);
+        text = text.replace(/\$title\$/g, data.title);
+        PostToCloud({url: text, title: data.title.replaceAll(' ','')})
+        Tips("已同步到云端\nurl: " + text + "\t" + "title: " + data.title)
+        // navigator.clipboard.writeText(text);
+        // Tips("已复制到剪贴板");
+        return false;
     });
 
     return html;
@@ -513,4 +535,19 @@ function UItoggle() {
     } else if ($down.is(":hidden")) {
         $down.show();
     }
+}
+
+
+/*
+ * 提交地址到服务器端下载
+ */ 
+const HOST = "http://127.0.0.1:9006"    // 服务器地址
+function PostToCloud(msg) {
+    const url = HOST + "/22a4c19296767a3dcb03a6c516ffbeb82f35c3a6848556c598e8d6fb7c5c3415"
+    const t = parseInt(new Date().getTime()/1000)
+    const body = JSON.stringify(msg)
+    const sha256 = $.sha256(msg.url + t.toString())
+    $.post(url + "?t=" + t + "&s=" + sha256, body, function(data, status){
+        alert("#发送请求至服务器: " + (data) + "\n状态: " + status);
+    });
 }
