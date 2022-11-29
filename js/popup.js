@@ -541,13 +541,21 @@ function UItoggle() {
 /*
  * 提交地址到服务器端下载
  */ 
-const HOST = "http://127.0.0.1:9006"    // 服务器地址
+let HOST = "http://127.0.0.1:9006"    // 服务器地址
+let TOKEN = ""
+chrome.storage.sync.get(G.OptionLists, function (items) {
+    // alert(11 + "\t" +items.PostToServerURL)
+    if (items.PostToServerURL) {
+        HOST = items.PostToServerURL
+        TOKEN = items.PostToServerToken
+    }
+})
 function PostToCloud(msg) {
     const url = HOST + "/22a4c19296767a3dcb03a6c516ffbeb82f35c3a6848556c598e8d6fb7c5c3415"
     const t = parseInt(new Date().getTime()/1000)
     const body = JSON.stringify(msg)
     const sha256 = $.sha256(msg.url + t.toString())
-    $.post(url + "?t=" + t + "&s=" + sha256, body, function(data, status){
+    $.post(url + "?t=" + t + "&s=" + sha256 + "&tk=" + TOKEN, body, function(data, status){
         alert("#发送请求至服务器: " + (data) + "\n状态: " + status);
     });
 }

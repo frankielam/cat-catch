@@ -11,7 +11,7 @@
   <body>
     <div class="wrapper">
       <section>
-        <h1 class="optionsTitle">抓取后缀</h1>
+        <h1 class="optionsTitle">抓取后缀0</h1>
         <div class="optionBox">
           <span class="explain">填写不含"."的后缀, 不过滤大小填0</span>
           <table id="extList">
@@ -303,6 +303,34 @@
           </div>
         </div>
       </section>
+
+
+      <section>
+        <h1 class="optionsTitle">云下载设置</h1>
+        <div class="optionBox" id="OtherOption">
+          <div class="list otherOption">
+            <div class="item">
+              <div>云服务器 URL</div>
+              <input
+                id="PostToServerURL"
+                type="text"
+                class="width100"
+              />
+            </div>
+            <div class="item">
+              <div>Access Token</div>
+              <input
+                id="PostToServerToken"
+                type="text"
+                class="width100"
+              />
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
     </div>
 
     <script src="lib/base64.js"></script>

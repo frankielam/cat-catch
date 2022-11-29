@@ -30,7 +30,9 @@ G.OptionLists = [
     "refreshClear",
     "initComplete",
     "youtube",
-    "catDownload"
+    "catDownload",
+    "PostToServerURL",
+    "PostToServerToken"
 ];
 G.TabIdList = [
     "featMobileTabId",
